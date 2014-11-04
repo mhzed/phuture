@@ -26,11 +26,11 @@ module.exports["Once cancel"] = (test)->
 
 module.exports["Once finish"] = (test)->
   state = 0
-  task = future.once 10, ()-> state = 1
+  task = future.once 10, ()-> ++state
   task.finish()
   task.cancel() # no effect
 
-  future.once 1, ()->
+  future.once 15, ()->
     test.equal(state, 1, "once task finished");
     test.equal(task.isCancelled(), false, 'not cancelled state')
     test.equal(task.isDone(), true, 'finished state')

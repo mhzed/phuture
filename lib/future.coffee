@@ -6,12 +6,15 @@ class OnceFuture
     @timer = setTimeout @runTime, @ms
 
   cancel : ()->
-    if @isDone() then return;
+    if @isDone() then return false;
     clearTimeout(@timer);
     @timer = undefined;
+    true;
   finish : ()->
-    if @isDone() then return;
+    if @isDone() then return false;
+    clearTimeout(@timer);
     @runTime();
+    true;
   result : ()-> @res
 
     # true if cancelled or finished
@@ -38,15 +41,17 @@ class ManyFuture
   _remainTimes : ()-> @maxRun - @n
 
   cancel : ()->
-    if @isDone() then return;
+    if @isDone() then return false;
     clearInterval(@timer);
     @timer = undefined;
+    true
 
   finish : ()->
-    if @isDone() then return;
+    if @isDone() then return false;
     clearInterval(@timer);
-    @runTime();
+    @res = @cb(); @n++;
     @timer = null;
+    true
 
   finishAfter : (n, @finishCb)-> @maxRun = @n + n;
   result : ()-> @res

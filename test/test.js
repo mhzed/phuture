@@ -40,11 +40,11 @@
     var state, task;
     state = 0;
     task = future.once(10, function() {
-      return state = 1;
+      return ++state;
     });
     task.finish();
     task.cancel();
-    return future.once(1, function() {
+    return future.once(15, function() {
       test.equal(state, 1, "once task finished");
       test.equal(task.isCancelled(), false, 'not cancelled state');
       test.equal(task.isDone(), true, 'finished state');
