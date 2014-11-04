@@ -1,0 +1,28 @@
+{
+  "name": "phuture",
+  "version": "0.0.1",
+  "description": "future utility cancel manipulate timer function",
+  "main": "lib/future.js",
+  "scripts": {
+    "test": "nodeunit test/test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mhzed/phuture"
+  },
+  "keywords": [
+    "future",
+    "cancel",
+    "timer",
+    "function"
+  ],
+  "devDependencies" : {
+    "nodeunit" : "*"
+  } ,
+  "author": "mhzed",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mhzd/phuture/issues"
+  },
+  "homepage": "https://github.com/mhzd/phuture"
+}
