@@ -53,6 +53,24 @@
     });
   };
 
+  module.exports["Once finish with"] = function(test) {
+    var state, task;
+    state = 0;
+    task = future.once(10, function(n, m) {
+      if (n) {
+        return state = n + m;
+      }
+    });
+    task.finish(3, 3);
+    return future.once(15, function() {
+      test.equal(state, 6, "once task finished");
+      test.equal(task.isCancelled(), false, 'not cancelled state');
+      test.equal(task.isDone(), true, 'finished state');
+      test.equal(task.result(), 6, "result saved");
+      return test.done();
+    });
+  };
+
   module.exports["Interval run and cancel"] = function(test) {
     var state, task;
     state = 0;
@@ -78,7 +96,25 @@
     });
     task.finish();
     task.cancel();
-    return future.once(3, function() {
+    return future.once(13, function() {
+      test.equal(task.result(), state, "result saved");
+      test.equal(task.isCancelled(), false, 'not cancelled state');
+      test.equal(task.isDone(), true, 'finished state');
+      return test.done();
+    });
+  };
+
+  module.exports["Interval run and finish with"] = function(test) {
+    var state, task;
+    state = 0;
+    task = future.once(10, function(n, m) {
+      if (n) {
+        return state = n + m;
+      }
+    });
+    task.finish(3, 3);
+    task.cancel();
+    return future.once(13, function() {
       test.equal(task.result(), state, "result saved");
       test.equal(task.isCancelled(), false, 'not cancelled state');
       test.equal(task.isDone(), true, 'finished state');

@@ -10,11 +10,13 @@ class OnceFuture
     clearTimeout(@timer);
     @timer = undefined;
     true;
-  finish : ()->
+  # params if provided are passed to run callback
+  finish : (params...)->
     if @isDone() then return false;
     clearTimeout(@timer);
-    @runTime();
+    @res = @cb(params...); @timer = null;
     true;
+
   result : ()-> @res
 
     # true if cancelled or finished
@@ -45,11 +47,11 @@ class ManyFuture
     clearInterval(@timer);
     @timer = undefined;
     true
-
-  finish : ()->
+  # params if provided are passed to run callback
+  finish : (params...)->
     if @isDone() then return false;
     clearInterval(@timer);
-    @res = @cb(); @n++;
+    @res = @cb(params...); @n++;
     @timer = null;
     true
 

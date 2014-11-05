@@ -37,6 +37,17 @@ module.exports["Once finish"] = (test)->
     test.equal(task.result(), 1, "result saved")
     test.done();
 
+module.exports["Once finish with"] = (test)->
+  state = 0
+  task = future.once 10, (n, m)-> if n then state = n + m
+  task.finish(3, 3)
+
+  future.once 15, ()->
+    test.equal(state, 6, "once task finished");
+    test.equal(task.isCancelled(), false, 'not cancelled state')
+    test.equal(task.isDone(), true, 'finished state')
+    test.equal(task.result(), 6, "result saved")
+    test.done();
 
 module.exports["Interval run and cancel"] = (test)->
   state = 0
@@ -57,7 +68,19 @@ module.exports["Interval run and finish"] = (test)->
   task.finish()
   task.cancel() # no effect
 
-  future.once 3, ()->
+  future.once 13, ()->
+    test.equal(task.result(), state, "result saved")
+    test.equal(task.isCancelled(), false, 'not cancelled state')
+    test.equal(task.isDone(), true, 'finished state')
+    test.done();
+
+module.exports["Interval run and finish with"] = (test)->
+  state = 0
+  task = future.once 10, (n, m)-> if n then state = n + m
+  task.finish(3, 3)
+  task.cancel() # no effect
+
+  future.once 13, ()->
     test.equal(task.result(), state, "result saved")
     test.equal(task.isCancelled(), false, 'not cancelled state')
     test.equal(task.isDone(), true, 'finished state')
