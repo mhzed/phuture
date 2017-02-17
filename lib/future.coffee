@@ -92,10 +92,21 @@ future = {
 
   loop : (msPause, runCb)->
     i = 0;
-    doloop = ()=>future.once(msPause, ()=>
-      runCb(i++, doloop);
-    )
+    loopFuture = {
+      _timer : null,
+      cancel : ()=>
+        loopFuture._cancelled = true
+        if (loopFuture._timer)
+          loopFuture._timer.cancel();
+          loopFuture._timer = null
+    }
+    doloop = ()=>
+      if (!loopFuture._cancelled) # allow cancel inside runCb
+        loopFuture._timer = future.once(msPause, ()=>
+          runCb(i++, doloop);
+      )
     doloop()
+    return loopFuture
 
 }
 

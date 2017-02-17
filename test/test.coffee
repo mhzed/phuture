@@ -122,7 +122,15 @@ module.exports["Interval run and reset interval"] = (test)->
 
 
 module.exports["loop"] = (test)->
-  future.loop(1, (i, next)=>
-    if (i<2) next()
+  task = future.loop(1, (i, next)=>
+    if (i<2) then next()
     else test.done();
   )
+
+module.exports["loop cancel"] = (test)->
+  task = future.loop(1, (i, next)=>
+    test.ok(false, 'never here')
+    next()
+  )
+  task.cancel()
+  test.done()

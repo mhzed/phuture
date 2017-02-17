@@ -172,15 +172,28 @@
   };
 
   module.exports["loop"] = function(test) {
-    return future.loop(1, (function(_this) {
+    var task;
+    return task = future.loop(1, (function(_this) {
       return function(i, next) {
-        if ((i < 2)(next())) {
-
+        if (i < 2) {
+          return next();
         } else {
           return test.done();
         }
       };
     })(this));
+  };
+
+  module.exports["loop cancel"] = function(test) {
+    var task;
+    task = future.loop(1, (function(_this) {
+      return function(i, next) {
+        test.ok(false, 'never here');
+        return next();
+      };
+    })(this));
+    task.cancel();
+    return test.done();
   };
 
 }).call(this);
