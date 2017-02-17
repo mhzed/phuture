@@ -1,6 +1,6 @@
 {
   "name": "phuture",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "future utility cancel manipulate timer function",
   "main": "lib/future.js",
   "scripts": {
@@ -16,9 +16,6 @@
     "timer",
     "function"
   ],
-  "devDependencies" : {
-    "nodeunit" : "*"
-  } ,
   "author": "mhzed",
   "license": "ISC",
   "bugs": {

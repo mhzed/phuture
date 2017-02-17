@@ -67,8 +67,7 @@ class ManyFuture
       clearInterval(@timer);
       @timer = setInterval @runTime, @ms
 
-
-module.exports = {
+future = {
 
   once : (msInFuture, runCb)->
     return new OnceFuture(msInFuture, runCb)
@@ -76,5 +75,28 @@ module.exports = {
   interval : (msInterval, runCb)->
     return new ManyFuture(msInterval, -1, runCb)
 
+  timeoutWrap : (msTimeout, fn, ctx)->
+    if (ctx) then fn = fn.bind(ctx);
+    (fargs..., cb)=>
+      called = false;
+      task = future.once msTimeout, ()=>
+        if (!called)
+          called = true
+          cb(new Error("Timed out after " + msTimeout + " ms"))
+      fn(fargs..., (cbargs...)=>
+        if !called
+          task.cancel()
+          called = true;
+          cb(cbargs...)
+      )
+
+  loop : (msPause, runCb)->
+    i = 0;
+    doloop = ()=>future.once(msPause, ()=>
+      runCb(i++, doloop);
+    )
+    doloop()
 
 }
+
+module.exports = future
